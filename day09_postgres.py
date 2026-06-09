@@ -55,12 +55,15 @@ def calculate_metrics(record):
     pct_change = (daily_change / record["prev_close"]) * 100
     return round(pct_change, 2)
 
-def route_signal(record, min_volume=1000000, threshold=200.00):
+def route_signal(record, min_volume=1000000, threshold=200.00, min_pct=0.5):
     is_up = record["close"] > record["prev_close"]
     is_liquid = record["volume"] >= min_volume
     is_priced = record["close"] > threshold
-    if is_up and is_liquid and is_priced:
+    is_strong = record["pct_change"] >= min_pct
+    if is_up and is_liquid and is_priced and is_strong:
         return "Buy signal"
+    elif is_up and is_liquid and is_priced:
+        return "Weak signal — low pct change"
     elif is_up and is_liquid:
         return "Liquid — below threshold"
     elif is_up:

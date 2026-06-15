@@ -55,7 +55,7 @@ def calculate_metrics(record):
     pct_change = (daily_change / record["prev_close"]) * 100
     return round(pct_change, 2)
 
-def route_signal(record, min_volume=1000000, threshold=200.00, min_pct=0.5):
+def route_signal(record, min_volume=1000000, threshold=200.00, min_pct=1.0):
     is_up = record["close"] > record["prev_close"]
     is_liquid = record["volume"] >= min_volume
     is_priced = record["close"] > threshold
